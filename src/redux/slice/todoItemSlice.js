@@ -7,16 +7,14 @@ const todoItemSlice = createSlice({
  },
  reducers: {
    
-    addTodoItem(state,action){
-        const {id, title, isCompleted, userId} = action.payload
-        console.log("action dta" + title)
-        state.todoArray.push({id, title, isCompleted: false, userId})
-        console.log("state dta" + JSON.stringify(state))
+    addToDoList(state,action){
+      const {dataArray} = action.payload
+      state.todoArray.concat(dataArray)
 
-    },
+    }
  }
 })
 
-export const {addTodoItem} = todoItemSlice.actions;
+export const {addToDoList} = todoItemSlice.actions;
 
 export default todoItemSlice.reducer;

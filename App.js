@@ -20,8 +20,8 @@ class App extends React.Component {
 
   render() {
 
-      GoogleSignin.configure();
-      //firebase.initializeApp(firebaseDbConfig);  
+    GoogleSignin.configure();
+    firebase.initializeApp(firebaseDbConfig);  
     return (
       <Provider store={store} >
         <NavigationView></NavigationView>

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Image, Text, View } from 'react-native';
 import Images from '../assets/images';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { colors } from '../assets/utils/colors';
 
 function SplashScreen(){
     const navigation = useNavigation();
@@ -13,8 +14,11 @@ function SplashScreen(){
         setTimeout(()=>{
             GoogleSignin.getCurrentUser().then((userDetails)=>{
                 console.log(JSON.stringify(userDetails))
-                navigation.replace("Home",{userId:userDetails.user.id})
-
+                if(!userDetails==undefined && !userDetails==null){
+                    //navigation.replace("Home",{userId:userDetails.user.id})
+                }else{
+                    navigation.replace("Login")
+                }
               }).catch((error)=>{
                 console.log("error >> "+JSON.stringify(error))
                 navigation.replace("Login")
@@ -24,8 +28,8 @@ function SplashScreen(){
     },[]);
     
     return (
-        <View style={{flex:1}}>
-            <Image style={{height:'100%',width:'100%'}} source={Images.splash}></Image>
+        <View style={{flex:1, backgroundColor:colors.beige, justifyContent:'center'}}>
+            <Text style={{fontSize:40, color:colors.sage, alignSelf:'center', fontWeight:'bold'}}>To-Do</Text>
         </View>
     );
 }

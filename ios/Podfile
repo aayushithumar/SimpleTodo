@@ -5,7 +5,7 @@ platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
-
+use_modular_headers!
 target 'SimpleTodo' do
   config = use_native_modules!
 
@@ -18,10 +18,13 @@ target 'SimpleTodo' do
     :production => production,
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => FlipperConfiguration.enabled,
+    #:flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+
 
   target 'SimpleTodoTests' do
     inherit! :complete
@@ -31,5 +34,14 @@ target 'SimpleTodo' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+          target.build_configurations.each do |config|
+              config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          end
+        end
+      end
+    end
   end
 end
